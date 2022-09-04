@@ -24,6 +24,8 @@ Local dev machine access to Swagger UI (Open API): [http://localhost:5000/swagge
 
 `docker run -d -p:5000:5000 altice/alticci-sequence-finder`
 
+## App is available online:
+
 App is currently running and hosted in AWS (Elastic Beanstalk): [https://alticci.jeruiz-negron.com/](https://alticci.jeruiz-negron.com/)
 
 Swagger UI (Open API) can be accessed at: [https://alticci.jeruiz-negron.com/swagger-ui/index.html](https://alticci.jeruiz-negron.com/swagger-ui/index.html)
