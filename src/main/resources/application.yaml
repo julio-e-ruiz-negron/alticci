@@ -1,0 +1,8 @@
+server:
+  port: 5000
+  error:
+    whitelabel:
+      enabled: false
+spring:
+  thymeleaf:
+    prefix: classpath:/static/
