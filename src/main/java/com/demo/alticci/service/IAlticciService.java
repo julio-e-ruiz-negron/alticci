@@ -8,5 +8,5 @@ import javax.validation.constraints.NotNull;
 
 public interface IAlticciService {
     BigInteger computeAlticciSequence(
-            @NotNull @Min(value = 0, message = "index must greater or equal to 0") @Max(value = 2500, message = "index must be less or equal to 2500") Long index);
+            @NotNull @Min(value = 0, message = "n must greater or equal to 0") @Max(value = 2500, message = "n must be less or equal to 2500") Long n);
 }

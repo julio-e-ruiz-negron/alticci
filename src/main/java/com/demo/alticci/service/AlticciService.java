@@ -14,20 +14,19 @@ public class AlticciService implements IAlticciService {
     public final Map<Long, BigInteger> computedAlticciSequences = new ConcurrentHashMap<>();
 
     @Override
-    public BigInteger computeAlticciSequence(
-            Long index) {
-        if (index == 0) {
+    public BigInteger computeAlticciSequence(Long n) {
+        if (n == 0) {
             return BigInteger.valueOf(0L);
         }
-        if (index == 1 || index == 2) {
+        if (n == 1 || n == 2) {
             return BigInteger.valueOf(1L);
         }
         // Return cached computed sequence for index (if it exists)
-        if (computedAlticciSequences.containsKey(index)) {
-            return computedAlticciSequences.get(index);
+        if (computedAlticciSequences.containsKey(n)) {
+            return computedAlticciSequences.get(n);
         }
-        BigInteger computedAlticciSequence = computeAlticciSequence(index - 3).add(computeAlticciSequence(index - 2));
-        computedAlticciSequences.putIfAbsent(index, computedAlticciSequence);
+        BigInteger computedAlticciSequence = computeAlticciSequence(n - 3).add(computeAlticciSequence(n - 2));
+        computedAlticciSequences.putIfAbsent(n, computedAlticciSequence);
         return computedAlticciSequence;
     }
 }

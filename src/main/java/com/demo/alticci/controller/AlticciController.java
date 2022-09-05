@@ -27,10 +27,10 @@ public class AlticciController {
         this.alticciService = alticciService;
     }
 
-    @GetMapping("/{index}")
+    @GetMapping("/{n}")
     @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<BigInteger> getAlticciNumber(
-            @PathVariable("index") @NotNull @Min(value = 0, message = "index must greater or equal to 0") @Max(value = 2500, message = "index must be less or equal to 2500") Long index) {
-        return ResponseEntity.ok().body(alticciService.computeAlticciSequence(index));
+            @PathVariable @NotNull @Min(value = 0, message = "n must greater or equal to 0") @Max(value = 2500, message = "n must be less or equal to 2500") Long n) {
+        return ResponseEntity.ok().body(alticciService.computeAlticciSequence(n));
     }
 }

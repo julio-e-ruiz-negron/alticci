@@ -38,7 +38,7 @@ class AlticciControllerTests {
 				.andExpect(status().isBadRequest())
 				.andExpect(result -> assertTrue(
 						result.getResolvedException() instanceof ConstraintViolationException))
-				.andExpect(result -> assertEquals("getAlticciNumber.index: index must greater or equal to 0",
+				.andExpect(result -> assertEquals("getAlticciNumber.n: n must greater or equal to 0",
 						result.getResolvedException().getMessage()));
 	}
 
@@ -49,7 +49,7 @@ class AlticciControllerTests {
 				.andExpect(status().isBadRequest())
 				.andExpect(result -> assertTrue(
 						result.getResolvedException() instanceof ConstraintViolationException))
-				.andExpect(result -> assertEquals("getAlticciNumber.index: index must be less or equal to 2500",
+				.andExpect(result -> assertEquals("getAlticciNumber.n: n must be less or equal to 2500",
 						result.getResolvedException().getMessage()));
 	}
 
