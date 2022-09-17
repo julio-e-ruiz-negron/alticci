@@ -3,12 +3,11 @@ import {
   faCheck,
   faTimes,
   faInfoCircle,
-  faTriangleExclamation,
   faSearch,
   faExclamationTriangle
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import httpClient from '../api/httpClient';
+import { useSequence } from '../hooks/useSequence';
 
 const INDEX_REGEX =
   /^([0-9]|([1-9][0-9])|([1-9][0-9][0-9])|1[0-9][0-9][0-9]|2[0-4][0-9][0-9]|2500)$/;
@@ -21,43 +20,42 @@ const AlticciForm = () => {
   const [index, setIndex] = useState('');
   const [validIndex, setValidIndex] = useState(false);
   const [indexFocus, setIndexFocus] = useState(false);
+  const [successMsg, setSuccessMsg] = useState(false);
+  const [errorMsg, setErrorMsg] = useState(false);
 
-  const [errMsg, setErrMsg] = useState('');
-  const [successMsg, setSuccessMsg] = useState('');
+  const { sequence, isLoading, error, fetchSequence } = useSequence(index);
 
   useLayoutEffect(() => {
     indexRef.current.focus();
   }, []);
 
   useLayoutEffect(() => {
+    setSuccessMsg('');
+    setErrorMsg('');
     setValidIndex(INDEX_REGEX.test(index));
   }, [index]);
 
   useLayoutEffect(() => {
-    setErrMsg('');
-    setSuccessMsg('');
-  }, [index]);
+    if (sequence !== null) {
+      setSuccessMsg(`Sequence number: ${sequence}`);
+      successRef.current.focus();
+    }
+  }, [sequence]);
+
+  useLayoutEffect(() => {
+    if (error) {
+      setErrorMsg(`Error returned from server: ${error}`);
+      errRef.current.focus();
+    }
+  }, [error]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
     if (!INDEX_REGEX.test(index)) {
-      setErrMsg('Invalid Entry');
+      setErrorMsg('Invalid Entry');
       return;
     }
-    httpClient
-      .get(index)
-      .then(({ data }) => {
-        setSuccessMsg('Sequence Number: ' + data);
-        successRef.current.focus();
-      })
-      .catch(({ data, status }) => {
-        if (status === 400) {
-          console.log(data);
-          console.log(status);
-          setErrMsg('Invalid response retured from server');
-        }
-        errRef.current.focus();
-      });
+    fetchSequence();
   };
 
   return (
@@ -80,7 +78,7 @@ const AlticciForm = () => {
         </label>
         <div className="flex items-center relative">
           <input
-            className="flex-auto focus:outline-0 border-t border-r border-b border-l border-solid border-gray-300 p-1 pr-7 text-black text-md"
+            className="flex-auto focus:outline-0 border-2 border-solid border-gray-300 p-1 pr-7 text-black text-md"
             type="text"
             id="index"
             ref={indexRef}
@@ -113,24 +111,25 @@ const AlticciForm = () => {
             Please enter a number from 0 to 2500
           </p>
         </div>
-        <p
-          ref={successRef}
-          className={`${successMsg ? 'text-md color: white' : 'hidden'}`}
-        >
+        <p ref={successRef} className={`${successMsg ? 'text-md' : 'hidden'}`}>
           {successMsg}
         </p>
-        <p
-          ref={errRef}
-          className={`${
-            errMsg
-              ? 'p-1 [&>svg]:mr-2 rounded-md bg-red-600  text-xs text-white'
-              : 'hidden'
-          }`}
-          aria-live="assertive"
-        >
-          <FontAwesomeIcon icon={faExclamationTriangle} />
-          {errMsg}
-        </p>
+        {isLoading ? (
+          <p>Retrieving sequence...please wait...</p>
+        ) : (
+          <p
+            ref={errRef}
+            className={`${
+              errorMsg
+                ? 'p-1 [&>svg]:mr-2 rounded-md bg-red-600  text-xs text-white'
+                : 'hidden'
+            }`}
+            aria-live="assertive"
+          >
+            <FontAwesomeIcon icon={faExclamationTriangle} />
+            {errorMsg}
+          </p>
+        )}
       </form>
     </section>
   );

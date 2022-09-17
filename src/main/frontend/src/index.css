@@ -8,6 +8,11 @@
   box-sizing: border-box;
 }
 
+html,
+body {
+  height: 100vh;
+}
+
 body {
   font-family: Helvetica, Arial, Tahoma, sans-serif;
   font-size: 14px;
